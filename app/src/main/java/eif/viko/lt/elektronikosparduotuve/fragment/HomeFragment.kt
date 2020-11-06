@@ -1,10 +1,9 @@
 package eif.viko.lt.elektronikosparduotuve.fragment
 
 import android.os.Bundle
+import android.view.*
+import android.widget.TextView
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +19,8 @@ import kotlinx.android.synthetic.main.fragment_home.*
 class HomeFragment : Fragment(R.layout.fragment_home), ProductListAdapter.Interaction {
 
     private lateinit var productViewModel: ProductViewModel
+    private lateinit var topMenu: Menu
+    private lateinit var counter: TextView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,10 +41,33 @@ class HomeFragment : Fragment(R.layout.fragment_home), ProductListAdapter.Intera
         }
 
 
+
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+    }
     override fun addToCart(product: Product) {
         Toast.makeText(context, "Sekmingai prideta i krepseli", Toast.LENGTH_LONG).show()
+
+        productViewModel.add(product)
+
+//        TextView mTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
+//
+//
+//
+//
+//
+//        val m: MenuItem? = topMenu?.findItem(R.id.myButton);
+//
+//
+//        var i = 0
+//        counter = m?.actionView!!.findViewById(R.id.notification_badge)
+//
+//        counter.text = i++.toString()
+
+
+
     }
 
     override fun viewDetails(product: Product) {

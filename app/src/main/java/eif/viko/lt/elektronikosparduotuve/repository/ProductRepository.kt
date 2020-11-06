@@ -6,7 +6,11 @@ import eif.viko.lt.elektronikosparduotuve.model.Product
 
 object ProductRepository {
     private val db = mutableListOf<Product>()
+    private val cart = mutableListOf<Product>()
     var updatedList = MutableLiveData<List<Product>>()
+    var shopingCart = MutableLiveData<List<Product>>()
+
+
 
     fun getProducts(): LiveData<List<Product>> {
         db.clear()
@@ -14,6 +18,16 @@ object ProductRepository {
         updatedList.value = db
         return updatedList
     }
+    fun add(product: Product) {
+        cart.add(product)
+        shopingCart.value = cart
+    }
+    fun getShopingCart(): LiveData<List<Product>>{
+        return shopingCart
+    }
+
+
+
     // Webserviso ar kitu vietu duomenys
     fun load() {
         db.add(Product(1, 20.54, "1.5 TDI", "Pirmas", "https://loremflickr.com/220/240"))

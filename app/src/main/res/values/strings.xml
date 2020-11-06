@@ -9,4 +9,5 @@
     <string name="secondary_text">secondary</string>
     <string name="more">Plačiau</string>
     <string name="add_to_cart">Į krepšelį</string>
+    <string name="cartitems">cartItems</string>
 </resources>

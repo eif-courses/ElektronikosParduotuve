@@ -5,14 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.View.OnClickListener
-import android.widget.Button
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.google.android.material.button.MaterialButton
 import com.squareup.picasso.Picasso
 import eif.viko.lt.elektronikosparduotuve.R
 import eif.viko.lt.elektronikosparduotuve.model.Product
+import kotlinx.android.synthetic.main.fragment_view_details.view.*
 import kotlinx.android.synthetic.main.product_item_layout.view.*
+
 
 class ProductListAdapter(private val interaction: Interaction? = null) :
     ListAdapter<Product, ProductListAdapter.ProductViewHolder>(ProductDC()) {
@@ -22,8 +22,9 @@ class ProductListAdapter(private val interaction: Interaction? = null) :
             .inflate(R.layout.product_item_layout, parent, false), interaction
     )
 
-    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) =
-        holder.bind(getItem(position))
+    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
+       holder.bind(getItem(position))
+    }
 
     fun swapData(data: List<Product>) {
         submitList(data.toMutableList())
@@ -46,9 +47,13 @@ class ProductListAdapter(private val interaction: Interaction? = null) :
 
             val clicked = getItem(adapterPosition)
 
-            interaction?.addToCart(clicked)
-            interaction?.viewDetails(clicked)
-            interaction?.clickOnItem(clicked)
+
+            when (v) {
+                itemView.btn_add_to_cart -> interaction?.addToCart(clicked)
+                itemView.btn_details -> interaction?.viewDetails(clicked)
+                else -> interaction?.clickOnItem(clicked)
+            }
+
         }
 
         fun bind(item: Product) = with(itemView) {
