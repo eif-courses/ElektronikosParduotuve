@@ -13,4 +13,6 @@ class ProductViewModel : ViewModel(){
 
     fun add(product: Product) = repository.add(product)
 
+    fun remove(product: Product) = repository.remove(product)
+
 }

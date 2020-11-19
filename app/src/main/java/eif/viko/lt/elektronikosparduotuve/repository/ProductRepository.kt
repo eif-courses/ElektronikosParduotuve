@@ -22,6 +22,13 @@ object ProductRepository {
         cart.add(product)
         shopingCart.value = cart
     }
+    fun remove(product: Product){
+        cart.remove(product)
+        shopingCart.value = cart
+    }
+
+
+
     fun getShopingCart(): LiveData<List<Product>>{
         return shopingCart
     }

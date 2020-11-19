@@ -8,22 +8,25 @@ import android.view.View.OnClickListener
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.squareup.picasso.Picasso
-import eif.viko.lt.elektronikosparduotuve.R
+import eif.viko.lt.elektronikosparduotuve.databinding.ProductItemLayoutBinding
 import eif.viko.lt.elektronikosparduotuve.model.Product
-import kotlinx.android.synthetic.main.fragment_view_details.view.*
-import kotlinx.android.synthetic.main.product_item_layout.view.*
 
 
 class ProductListAdapter(private val interaction: Interaction? = null) :
     ListAdapter<Product, ProductListAdapter.ProductViewHolder>(ProductDC()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ProductViewHolder(
-        LayoutInflater.from(parent.context)
-            .inflate(R.layout.product_item_layout, parent, false), interaction
-    )
+    lateinit var binding: ProductItemLayoutBinding
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
+        binding =
+            ProductItemLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ProductViewHolder(binding, interaction)
+    }
+
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-       holder.bind(getItem(position))
+        holder.bind(getItem(position))
     }
 
     fun swapData(data: List<Product>) {
@@ -31,14 +34,14 @@ class ProductListAdapter(private val interaction: Interaction? = null) :
     }
 
     inner class ProductViewHolder(
-        itemView: View,
+        private val binding: ProductItemLayoutBinding,
         private val interaction: Interaction?
-    ) : RecyclerView.ViewHolder(itemView), OnClickListener {
+    ) : RecyclerView.ViewHolder(binding.root), OnClickListener {
 
         init {
-            itemView.setOnClickListener(this)
-            itemView.btn_add_to_cart.setOnClickListener(this)
-            itemView.btn_details.setOnClickListener(this)
+            binding.root.setOnClickListener(this)
+            binding.btnAddToCart.setOnClickListener(this)
+            binding.btnDetails.setOnClickListener(this)
         }
 
         override fun onClick(v: View?) {
@@ -48,19 +51,21 @@ class ProductListAdapter(private val interaction: Interaction? = null) :
             val clicked = getItem(adapterPosition)
 
 
-            when (v) {
-                itemView.btn_add_to_cart -> interaction?.addToCart(clicked)
-                itemView.btn_details -> interaction?.viewDetails(clicked)
-                else -> interaction?.clickOnItem(clicked)
-            }
+            // ATNAUJINTAS switch sakinys kotlin kalboje
+                when (v) {
+                    binding.btnAddToCart -> interaction?.addToCart(clicked)
+                    binding.btnDetails -> interaction?.viewDetails(clicked)
+                    else -> interaction?.clickOnItem(clicked)
+                }
+
 
         }
 
-        fun bind(item: Product) = with(itemView) {
+        fun bind(item: Product) = with(binding) {
             // TODO: Bind the data with View
-            product_title.text = item.title
-            product_price.text = item.price.toString()
-            Picasso.get().load(item.imageURL).into(product_image)
+            productTitle.text = item.title
+            productPrice.text = item.price.toString()
+            Picasso.get().load(item.imageURL).into(productImage)
 
         }
     }
