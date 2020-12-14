@@ -20,9 +20,8 @@
         android:label="Detaliau"
         tools:layout="@layout/fragment_view_details" >
         <argument
-            android:name="product"
-            app:argType="eif.viko.lt.elektronikosparduotuve.model.Product"
-            app:nullable="true" />
+            android:name="itemObject"
+            app:argType="eif.viko.lt.elektronikosparduotuve.model.Item" />
     </fragment>
     <fragment
         android:id="@+id/shoppingCartFragment"

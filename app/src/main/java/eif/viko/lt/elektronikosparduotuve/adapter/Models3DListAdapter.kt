@@ -39,6 +39,7 @@ class Models3DListAdapter(private val interaction: Interaction? = null) :
             binding.modelPlaySoundBtn.setOnClickListener(this)
             binding.modelAddToCart.setOnClickListener(this)
             binding.modelView3DBtn.setOnClickListener(this)
+            binding.modelViewDetails.setOnClickListener(this)
         }
 
         override fun onClick(v: View?) {
@@ -51,10 +52,9 @@ class Models3DListAdapter(private val interaction: Interaction? = null) :
                 binding.modelPlaySoundBtn -> interaction?.playSound(clicked)
                 binding.modelAddToCart -> interaction?.addToCart(clicked)
                 binding.modelView3DBtn -> interaction?.preview3D(clicked)
+                binding.modelViewDetails -> interaction?.viewDetails(clicked)
                 else -> interaction?.item_clicked(clicked)
             }
-
-
         }
 
         fun bind(item: Item) = with(binding) {
@@ -70,6 +70,7 @@ class Models3DListAdapter(private val interaction: Interaction? = null) :
         fun preview3D(item: Item)
         fun playSound(item: Item)
         fun addToCart(item: Item)
+        fun viewDetails(item: Item)
 
     }
 

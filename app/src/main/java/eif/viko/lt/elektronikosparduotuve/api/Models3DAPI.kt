@@ -5,5 +5,6 @@ import retrofit2.Call
 import retrofit2.http.GET
 
 interface Models3DAPI {
-    @GET("lt.json") fun getModels(): Call<List<Item>>
+    @GET("lt.json")
+    fun getModels(): Call<List<Item>>
 }

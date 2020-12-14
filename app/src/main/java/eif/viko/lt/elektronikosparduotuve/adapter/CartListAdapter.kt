@@ -36,7 +36,7 @@ class CartListAdapter(private val interaction: Interaction? = null) :
 
         init {
             binding.root.setOnClickListener(this)
-            binding.removeItemFromCart.setOnClickListener(this)
+            binding.removeItemFromCart?.setOnClickListener(this)
         }
 
         override fun onClick(v: View?) {

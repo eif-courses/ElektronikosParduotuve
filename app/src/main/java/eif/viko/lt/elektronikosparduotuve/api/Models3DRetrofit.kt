@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object Models3DRetrofit {
-    const val BASE_URL = "https://muziejus-api.firebaseio.com/"
+    private const val BASE_URL = "https://muziejus-api.firebaseio.com/"
 
     private val retrofit by lazy {
         Retrofit.Builder()

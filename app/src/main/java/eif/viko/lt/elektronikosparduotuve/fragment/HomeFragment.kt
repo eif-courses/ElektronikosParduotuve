@@ -1,33 +1,32 @@
 package eif.viko.lt.elektronikosparduotuve.fragment
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import eif.viko.lt.elektronikosparduotuve.R
 import eif.viko.lt.elektronikosparduotuve.adapter.Models3DListAdapter
-import eif.viko.lt.elektronikosparduotuve.adapter.ProductListAdapter
 import eif.viko.lt.elektronikosparduotuve.databinding.FragmentHomeBinding
-import eif.viko.lt.elektronikosparduotuve.databinding.FragmentShoppingCartBinding
 import eif.viko.lt.elektronikosparduotuve.model.Item
 import eif.viko.lt.elektronikosparduotuve.model.Product
 import eif.viko.lt.elektronikosparduotuve.viewmodel.Models3DViewModel
 import eif.viko.lt.elektronikosparduotuve.viewmodel.ProductViewModel
 
 
-class HomeFragment : Fragment(R.layout.fragment_home), ProductListAdapter.Interaction, Models3DListAdapter.Interaction, MediaPlayer.OnPreparedListener {
+class HomeFragment : Fragment(R.layout.fragment_home), Models3DListAdapter.Interaction {
 
     private lateinit var productViewModel: ProductViewModel
     private lateinit var models3DViewModel: Models3DViewModel
@@ -44,12 +43,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), ProductListAdapter.Intera
         return binding.root
     }
 
-
-
-
-
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -57,69 +50,61 @@ class HomeFragment : Fragment(R.layout.fragment_home), ProductListAdapter.Intera
 
         models3DViewModel = ViewModelProvider(this).get(Models3DViewModel::class.java)
 
-
-
-
-        val models3DListAdapter: Models3DListAdapter  by lazy { Models3DListAdapter(this) }
+        val models3DListAdapter: Models3DListAdapter by lazy { Models3DListAdapter(this) }
 
         models3DViewModel.getModels().observe(viewLifecycleOwner, Observer {
             models3DListAdapter.swapData(it)
         })
 
 
-//        val productAdapter: ProductListAdapter  by lazy { ProductListAdapter(this) }
-//
-//        productViewModel.getProducts().observe(viewLifecycleOwner, Observer {
-//            productAdapter.swapData(it)
-//        })
+        val orientation = resources.configuration.orientation
 
-        binding.productRecycleview.apply {
-            layoutManager = GridLayoutManager(this@HomeFragment.context, 1)
-            adapter = models3DListAdapter
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            binding.productRecycleview.apply {
+                layoutManager = GridLayoutManager(this@HomeFragment.context, 2)
+                adapter = models3DListAdapter
+            }
+        } else {
+            binding.productRecycleview.apply {
+                layoutManager = GridLayoutManager(this@HomeFragment.context, 1)
+                adapter = models3DListAdapter
+            }
         }
 
 
-
-    }
-
-    override fun addToCart(product: Product) {
-        Toast.makeText(context, "Sekmingai prideta i krepseli", Toast.LENGTH_LONG).show()
-
-        productViewModel.add(product)
-
+//        binding.productRecycleview.apply {
+//            layoutManager = GridLayoutManager(this@HomeFragment.context, 1)
 //
-//
-//
-//
-//
-//
-//        val m: MenuItem? = topMenu?.findItem(R.id.myButton);
-//
-//
-//        var i = 0
-//        counter = m?.actionView!!.findViewById(R.id.notification_badge)
-//
-//        counter.text = i++.toString()
-
+//            adapter = models3DListAdapter
+//        }
 
 
     }
 
-    override fun viewDetails(product: Product) {
-        val action = HomeFragmentDirections.actionHomeFragmentToViewDetailsFragment(product)
-        findNavController().navigate(action)
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // Toast.makeText(baseContext, "Landscape Mode", Toast.LENGTH_SHORT).show()
+        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            // Toast.makeText(baseContext, "Portrait Mode", Toast.LENGTH_SHORT).show()
+        }
     }
 
-    override fun clickOnItem(product: Product) {
-        Toast.makeText(context, "$product", Toast.LENGTH_LONG).show()
-    }
+
     override fun addToCart(item: Item) {
         productViewModel.add(Product(title = item.title, imageURL = item.poster))
     }
+
     override fun item_clicked(item: Item) {
-        //Toast.makeText(context, "$item", Toast.LENGTH_LONG).show()
 
     }
+
+    override fun viewDetails(item: Item) {
+
+        val action = HomeFragmentDirections.actionHomeFragmentToViewDetailsFragment(item)
+        findNavController().navigate(action)
+    }
+
 
     override fun preview3D(item: Item) {
         val sceneViewerIntent = Intent(Intent.ACTION_VIEW)
@@ -148,10 +133,6 @@ class HomeFragment : Fragment(R.layout.fragment_home), ProductListAdapter.Intera
             prepare() // might take long! (for buffering, etc)
             start()
         }
-    }
-
-    override fun onPrepared(mp: MediaPlayer?) {
-        mp?.start()
     }
 
     override fun onDestroy() {

@@ -78,13 +78,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         performClick = true
-        Toast.makeText(this, "BACK", Toast.LENGTH_SHORT).show()
         return navController.navigateUp(appBarConfiguration) || return super.onSupportNavigateUp()
     }
+
+
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         menuInflater.inflate(R.menu.options_menu, menu)
+
         val menuItem: MenuItem? = menu?.findItem(R.id.myButton)
         val click = menuItem?.actionView
 

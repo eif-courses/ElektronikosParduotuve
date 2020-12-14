@@ -10,4 +10,6 @@
     <string name="more">Plačiau</string>
     <string name="add_to_cart">Į krepšelį</string>
     <string name="cartitems">cartItems</string>
+    <string name="action_1">awea</string>
+    <string name="action_2">REMOVE</string>
 </resources>
